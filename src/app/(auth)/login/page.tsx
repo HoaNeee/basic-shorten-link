@@ -1,12 +1,14 @@
 import FormLogin from "@/components/form-login";
-import React from "react";
+import React, { Suspense } from "react";
 
 const Login = () => {
-	return (
-		<div className="w-full h-full">
-			<FormLogin />
-		</div>
-	);
+  return (
+    <div className="w-full h-full">
+      <Suspense fallback={<></>}>
+        <FormLogin />
+      </Suspense>
+    </div>
+  );
 };
 
 export default Login;

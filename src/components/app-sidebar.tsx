@@ -1,25 +1,27 @@
 import React from "react";
 import {
-	Sidebar,
-	SidebarContent,
-	SidebarHeader,
-	SidebarRail,
+  Sidebar,
+  SidebarContent,
+  SidebarHeader,
+  SidebarRail,
 } from "./ui/sidebar";
-import DashboardNavMain from "./dashboard-nav-main";
+import SidebarNavMain from "./sidebar-nav-main";
 import AppSidebarHeader from "./app-sidebar-header";
+import SidebarNavUser from "./sidebar-nav-user";
 
 const AppSidebar = () => {
-	return (
-		<Sidebar collapsible="icon">
-			<SidebarHeader>
-				<AppSidebarHeader />
-			</SidebarHeader>
-			<SidebarContent>
-				<DashboardNavMain />
-			</SidebarContent>
-			<SidebarRail />
-		</Sidebar>
-	);
+  return (
+    <Sidebar side="left" collapsible="icon">
+      <SidebarHeader>
+        <AppSidebarHeader />
+      </SidebarHeader>
+      <SidebarContent>
+        <SidebarNavMain />
+        <SidebarNavUser />
+      </SidebarContent>
+      <SidebarRail />
+    </Sidebar>
+  );
 };
 
 export default AppSidebar;

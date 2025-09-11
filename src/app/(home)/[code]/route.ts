@@ -1,16 +1,17 @@
+import { getLinkWithCode } from "@/lib/db/queries";
 import { NextRequest, NextResponse } from "next/server";
 
 export const GET = async (
-	request: NextRequest,
-	{ params }: { params: Promise<{ code: string }> }
+  request: NextRequest,
+  { params }: { params: Promise<{ code: string }> }
 ) => {
-	try {
-		const { code } = await params;
+  try {
+    const { code } = await params;
 
-		console.log(code);
+    const link = await getLinkWithCode(code);
 
-		return NextResponse.redirect("http://localhost:3000/blogs");
-	} catch (error) {
-		console.log(error);
-	}
+    return NextResponse.redirect(link.main_url);
+  } catch (error) {
+    console.log(error);
+  }
 };

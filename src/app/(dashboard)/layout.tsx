@@ -3,17 +3,17 @@ import DashboardHeader from "@/components/dashboard-header";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 
 export default function DashboardLayoutRoot({
-	children,
+  children,
 }: Readonly<{
-	children: React.ReactNode;
+  children: React.ReactNode;
 }>) {
-	return (
-		<SidebarProvider>
-			<AppSidebar />
-			<SidebarInset>
-				<DashboardHeader />
-				<main className="w-full h-full">{children}</main>
-			</SidebarInset>
-		</SidebarProvider>
-	);
+  return (
+    <SidebarProvider>
+      <AppSidebar />
+      <SidebarInset>
+        <DashboardHeader />
+        <main className="w-full h-full">{children}</main>
+      </SidebarInset>
+    </SidebarProvider>
+  );
 }
