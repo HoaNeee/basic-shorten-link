@@ -112,6 +112,17 @@
   --sidebar-ring: oklch(0.556 0 0);
 }
 
+/* input[type="date"]::placeholder {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+  text-align: end;
+  width: 50px;
+} */
+
 @layer base {
   * {
     @apply border-border outline-ring/50;

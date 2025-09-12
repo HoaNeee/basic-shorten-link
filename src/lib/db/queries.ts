@@ -10,6 +10,8 @@ import {
 import { pool } from "./connect";
 import { TLink } from "@/types/link.types";
 import Pagination from "@/helpers/pagination";
+import { sendMail } from "@/helpers/send-mail";
+import { OneTimeCode } from "@/types/one-time-code.types";
 
 export const createGusestUser = async () => {
   try {
@@ -190,6 +192,17 @@ export const register = async (
     if (!email || !password || !username) {
       throw new ApiError(400);
     }
+    const otp = generateString("number", 4);
+
+    const subject = "Register - Your OTP Code";
+    const html = `
+    <h1>Register New Account</h1>
+    <p>We received a request to register your account. Use the following OTP code to register your account:</p>
+    <p>OTP will expire in 3 minutes</p>
+    <h2 style="color: #000;">${otp}</h2>
+    <p>If you did not request this, please ignore this email.</p>
+    <p>Thank you!</p>
+    `;
 
     const [exist1, exist2] = await Promise.all([
       getUserWithAccount(email),
@@ -209,10 +222,14 @@ export const register = async (
         exist1?.id || exist2?.id || undefined
       );
 
+      await saveOTP({ code: otp, ref_email: email });
+
       return newUser || exist1 || exist2;
     }
 
     //send mail here
+
+    // sendMail(email, subject, html);
 
     const { hashPass } = await hashPasswordUsingBcrypt(password);
 
@@ -258,9 +275,22 @@ export const verifyAccount = async (email: string, code: string) => {
       throw new ApiError(400);
     }
 
-    if (code !== "1234") {
-      throw new ApiError(400, "Code Invalid!");
+    const record = await getOTPWithEmail(email);
+
+    if (!record) {
+      throw new ApiError(404);
     }
+
+    const now = Date.now();
+    if (new Date(record.expired_at).getTime() < now) {
+      throw new ApiError(400, "Expired Code");
+    }
+
+    if (code.trim() !== record.code.trim()) {
+      throw new ApiError(400, "Invalid Code");
+    }
+
+    await deleteOTPWithId(record.id);
 
     const user = (await getUserWithAccount(email)) as TUser;
 
@@ -493,6 +523,93 @@ export const bulkDeleteLink = async (ids?: number[]) => {
     await Promise.all(ids.map((id) => deleteLink(id)));
 
     return true;
+  } catch (error) {
+    console.log(error);
+    if (error instanceof ApiError) {
+      throw error;
+    }
+    throw new ApiError(500, "Server error");
+  }
+};
+
+const saveOTP = async (payload: Partial<OneTimeCode>) => {
+  try {
+    const { code, ref_email, expired_at } = payload;
+
+    if (!code || !ref_email) {
+      throw new ApiError(400);
+    }
+
+    const [exist] = (await pool.query(
+      `SELECT * FROM one_time_codes WHERE ref_email = ? ORDER BY expired_at DESC LIMIT 1`,
+      [ref_email]
+    )) as any[];
+    if (exist && exist.length > 0) {
+      const record = exist[0] as OneTimeCode;
+      const now = Date.now();
+      if (new Date(record.expired_at).getTime() < now) {
+        await deleteOTPWithId(record.id);
+      } else {
+        //send mail here
+        return record;
+      }
+    }
+
+    const [result] = (await pool.query(
+      `INSERT INTO one_time_codes (code, ref_email, expired_at) VALUES (?, ?,${
+        expired_at ? expired_at : `NOW() + INTERVAL 3 MINUTE`
+      })`,
+      [code, ref_email]
+    )) as any[];
+    const id = result.insertId;
+
+    const [record] = (await pool.query(
+      `SELECT * FROM one_time_codes WHERE id = ?`,
+      [id]
+    )) as any[];
+
+    return record[0] as OneTimeCode;
+  } catch (error) {
+    console.log(error);
+    if (error instanceof ApiError) {
+      throw error;
+    }
+    throw new ApiError(500, "Server error");
+  }
+};
+
+const deleteOTPWithId = async (id: number) => {
+  try {
+    if (!id) {
+      throw new ApiError(400);
+    }
+
+    await pool.query(`DELETE FROM one_time_codes WHERE id = ?`, [id]);
+  } catch (error) {
+    console.log(error);
+    if (error instanceof ApiError) {
+      throw error;
+    }
+    throw new ApiError(500, "Server error");
+  }
+};
+
+const getOTPWithEmail = async (email: string) => {
+  try {
+    if (!email) {
+      throw new ApiError(400);
+    }
+
+    const [result] = (await pool.query(
+      `SELECT * FROM one_time_codes WHERE ref_email = ? ORDER BY expired_at DESC LIMIT 1`,
+      [email]
+    )) as any[];
+
+    if (result && result.length > 0) {
+      return result[0] as OneTimeCode;
+    }
+
+    return null;
   } catch (error) {
     console.log(error);
     if (error instanceof ApiError) {

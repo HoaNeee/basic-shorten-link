@@ -2,6 +2,7 @@ import { TLink } from "@/types/link.types";
 import React from "react";
 import CardItemLink from "./card-item-link";
 import CardItemLinkLoading from "./card-item-link-loading";
+import { ChartLineLink } from "./chart-link";
 
 const StatisticDetailPage = ({ link }: { link: TLink }) => {
   if (!link) {
@@ -20,7 +21,9 @@ const StatisticDetailPage = ({ link }: { link: TLink }) => {
     <div className="dark:bg-black w-full h-full bg-gray-100">
       <div className="flex flex-col p-6">
         <CardItemLink link={link} isStatistic />
-        <div className="flex-1 mt-6">Chart here</div>
+        <div className="flex-1 mt-6">
+          <ChartLineLink />
+        </div>
       </div>
     </div>
   );
