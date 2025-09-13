@@ -24,7 +24,6 @@ CREATE TABLE IF NOT EXISTS links(
   url_icon VARCHAR(500),
   code VARCHAR(255),
   main_url VARCHAR(500),
-  view INT,
   domain VARCHAR(500),
   status VARCHAR(100),
   deleted BOOLEAN DEFAULT FALSE,
@@ -43,3 +42,11 @@ CREATE TABLE IF NOT EXISTS one_time_codes(
   is_verify BOOLEAN DEFAULT FALSE,
   PRIMARY KEY (id)
 );
+
+CREATE TABLE IF NOT EXISTS logs_action(
+  id INT AUTO_INCREMENT,
+  link_id INT NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (id),
+  FOREIGN KEY (link_id) REFERENCES links(id)
+)

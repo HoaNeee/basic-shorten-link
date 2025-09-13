@@ -5,56 +5,61 @@ import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 
 export const GET = errorHandler(async (req: NextRequest) => {
-  const cookie = await cookies();
+	const cookie = await cookies();
 
-  const token = cookie.get("jwt_token")?.value;
-  const is_guest = cookie.get("is_guest")?.value;
+	const token = cookie.get("jwt_token")?.value;
+	const is_guest = cookie.get("is_guest")?.value;
 
-  if (!token) {
-    throw new ApiError(400);
-  }
+	if (!token) {
+		throw new ApiError(400);
+	}
 
-  const payload = verifyJWT(token);
+	const payload = verifyJWT(token);
 
-  if (!payload) {
-    const res = NextResponse.json(
-      { success: false, error: "Unauthorized" },
-      { status: 401 }
-    );
-    res.cookies.delete("jwt_token");
-    return res;
-  }
+	if (!payload) {
+		const res = NextResponse.json(
+			{ success: false, error: "Unauthorized" },
+			{ status: 401 }
+		);
+		res.cookies.delete("jwt_token");
+		return res;
+	}
 
-  if (is_guest) {
-    return NextResponse.json(
-      {
-        success: true,
-        data: {
-          id: payload.id,
-          is_guest: true,
-        },
-      },
-      { status: 200 }
-    );
-  }
+	if (is_guest) {
+		return NextResponse.json(
+			{
+				success: true,
+				data: {
+					id: payload.id,
+					is_guest: true,
+				},
+			},
+			{ status: 200 }
+		);
+	}
 
-  const id = payload.id;
+	const id = payload.id;
 
-  const user = await getUserWithId(id);
-  delete user.password;
+	const user = await getUserWithId(id);
 
-  const res = NextResponse.json(
-    {
-      success: true,
-      data: user,
-    },
-    { status: 200 }
-  );
+	if (!user) {
+		throw new ApiError(401);
+	}
 
-  if (user.is_guest) {
-    const maxAge = 60 * 60 * 24 * 15;
-    setCookieOnServer(res, "is_guest", "true", maxAge);
-  }
+	delete user.password;
 
-  return res;
+	const res = NextResponse.json(
+		{
+			success: true,
+			data: user,
+		},
+		{ status: 200 }
+	);
+
+	if (user.is_guest) {
+		const maxAge = 60 * 60 * 24 * 15;
+		setCookieOnServer(res, "is_guest", "true", maxAge);
+	}
+
+	return res;
 });

@@ -25,3 +25,16 @@ export const sendMail = (email: string, subject: any, html: any) => {
 		}
 	});
 };
+
+export const sendMailOTPRegister = async (otp: string, email: string) => {
+	const subject = "Register - Your OTP Code";
+	const html = `
+				<h1>Register New Account</h1>
+				<p>We received a request to register your account. Use the following OTP code to register your account:</p>
+				<p>OTP will expire in 3 minutes</p>
+				<h2 style="color: #000;">${otp}</h2>
+				<p>If you did not request this, please ignore this email.</p>
+				<p>Thank you!</p>
+		`;
+	sendMail(email, subject, html);
+};
