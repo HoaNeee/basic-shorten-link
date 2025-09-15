@@ -804,9 +804,13 @@ export const saveOTP = async (payload: Partial<OneTimeCode>) => {
 			}
 		}
 
+		const expired_at_default = moment()
+			.add(3, "minute")
+			.format("YYYY-MM-DD HH:mm:ss");
+
 		const [result] = (await pool.query(
 			`INSERT INTO one_time_codes (code, ref_email, expired_at) VALUES (?, ?,${
-				expired_at ? expired_at : `NOW() + INTERVAL 3 MINUTE`
+				expired_at ? expired_at : `'${expired_at_default}'`
 			})`,
 			[code, ref_email]
 		)) as any[];
