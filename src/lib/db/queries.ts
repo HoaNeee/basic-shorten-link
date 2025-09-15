@@ -564,7 +564,7 @@ export const getDataChartLink = async (
 		switch (typeTime) {
 			case "day":
 				const [result] = (await pool.query(
-					`SELECT *, DATE_FORMAT(created_at, '%d/%m') as day, COUNT(DATE_FORMAT(created_at, '%d/%m')) AS view FROM logs_action WHERE link_id = ? AND created_at >= ? AND created_at <= ? GROUP BY (day) ORDER BY created_at DESC`,
+					`SELECT DATE_FORMAT(created_at, '%d/%m') as day, COUNT(*) AS view FROM logs_action WHERE link_id = ? AND created_at >= ? AND created_at <= ? GROUP BY (day) ORDER BY MIN(created_at) DESC`,
 					[link.id, newDateFrom, newDateTo]
 				)) as any[];
 
@@ -608,7 +608,7 @@ export const getDataChartLink = async (
 				return data;
 			case "week":
 				const [result_week] = (await pool.query(
-					`SELECT *, WEEK(created_at) AS week, COUNT(WEEK(created_at)) AS view FROM logs_action WHERE link_id = ? AND created_at >= ? AND created_at <= ? GROUP BY (week) ORDER BY created_at DESC`,
+					`SELECT WEEK(created_at) AS week, COUNT(*) AS view FROM logs_action WHERE link_id = ? AND created_at >= ? AND created_at <= ? GROUP BY (week) ORDER BY MIN(created_at) DESC`,
 					[link.id, newDateFrom, newDateTo]
 				)) as any[];
 
@@ -640,7 +640,7 @@ export const getDataChartLink = async (
 
 			case "month":
 				const [result_month] = (await pool.query(
-					`SELECT *, DATE_FORMAT(created_at, '%m/%y') as month, COUNT(DATE_FORMAT(created_at, '%m/%y')) AS view FROM logs_action WHERE link_id = ? AND created_at >= ? AND created_at <= ? GROUP BY (month) ORDER BY created_at DESC`,
+					`SELECT DATE_FORMAT(created_at, '%m/%y') as month, COUNT(*) AS view FROM logs_action WHERE link_id = ? AND created_at >= ? AND created_at <= ? GROUP BY (month) ORDER BY created_at DESC`,
 					[link.id, newDateFrom, newDateTo]
 				)) as any[];
 
@@ -685,7 +685,7 @@ export const getDataChartLink = async (
 				return data_month;
 			case "year":
 				const [result_year] = (await pool.query(
-					`SELECT *, YEAR(created_at) AS year, COUNT(YEAR(created_at)) AS view FROM logs_action WHERE link_id = ? AND created_at >= ? AND created_at <= ? GROUP BY (year) ORDER BY created_at DESC`,
+					`SELECT *, YEAR(created_at) AS year, COUNT(YEAR(created_at)) AS view FROM logs_action WHERE link_id = ? AND created_at >= ? AND created_at <= ? GROUP BY (year) ORDER BY MIN(created_at) DESC`,
 					[link.id, newDateFrom, newDateTo]
 				)) as any[];
 
