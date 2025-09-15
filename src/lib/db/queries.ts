@@ -640,7 +640,7 @@ export const getDataChartLink = async (
 
 			case "month":
 				const [result_month] = (await pool.query(
-					`SELECT DATE_FORMAT(created_at, '%m/%y') as month, COUNT(*) AS view FROM logs_action WHERE link_id = ? AND created_at >= ? AND created_at <= ? GROUP BY (month) ORDER BY created_at DESC`,
+					`SELECT DATE_FORMAT(created_at, '%m/%y') as month, COUNT(*) AS view FROM logs_action WHERE link_id = ? AND created_at >= ? AND created_at <= ? GROUP BY (month) ORDER BY MIN(created_at) DESC`,
 					[link.id, newDateFrom, newDateTo]
 				)) as any[];
 
@@ -685,7 +685,7 @@ export const getDataChartLink = async (
 				return data_month;
 			case "year":
 				const [result_year] = (await pool.query(
-					`SELECT *, YEAR(created_at) AS year, COUNT(YEAR(created_at)) AS view FROM logs_action WHERE link_id = ? AND created_at >= ? AND created_at <= ? GROUP BY (year) ORDER BY MIN(created_at) DESC`,
+					`SELECT YEAR(created_at) AS year, COUNT(YEAR(created_at)) AS view FROM logs_action WHERE link_id = ? AND created_at >= ? AND created_at <= ? GROUP BY (year) ORDER BY MIN(created_at) DESC`,
 					[link.id, newDateFrom, newDateTo]
 				)) as any[];
 
