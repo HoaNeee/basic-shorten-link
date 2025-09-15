@@ -13,7 +13,6 @@ export const POST = errorHandler(async (req: NextRequest) => {
 
 	if (record) {
 		const now = Date.now();
-		console.log(new Date(record.expired_at));
 		if (new Date(record.expired_at).getTime() < now) {
 			await deleteOTPWithId(record.id);
 		} else {
