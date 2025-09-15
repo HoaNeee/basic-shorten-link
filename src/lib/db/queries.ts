@@ -10,7 +10,7 @@ import {
 import { pool } from "./connect";
 import { TLink } from "@/types/link.types";
 import Pagination from "@/helpers/pagination";
-import { sendMail, sendMailOTPRegister } from "@/helpers/send-mail";
+import { sendMailOTPRegister } from "@/helpers/send-mail";
 import { OneTimeCode } from "@/types/one-time-code.types";
 import { LogAction } from "@/types/log.type";
 import moment from "moment";
