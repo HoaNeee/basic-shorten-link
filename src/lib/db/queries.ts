@@ -429,7 +429,7 @@ export const getLinkWithCodeOrId = async (code?: string, id?: number) => {
 
 		if (code) {
 			const [result] = (await pool.query(
-				`SELECT links.*, COUNT(logs_action.link_id) AS view FROM links LEFT JOIN logs_action ON logs_action.link_id = links.id WHERE code = ? GROUP BY (logs_action.link_id)`,
+				`SELECT links.*, COUNT(logs_action.link_id) AS view FROM links LEFT JOIN logs_action ON logs_action.link_id = links.id WHERE code = ? GROUP BY (links.id)`,
 				[code]
 			)) as any[];
 
