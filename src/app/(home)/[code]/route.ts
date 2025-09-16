@@ -1,20 +1,21 @@
 import { getLinkWithCodeOrId, saveLogs } from "@/lib/db/queries";
+import { notFound } from "next/navigation";
 import { NextRequest, NextResponse } from "next/server";
 
 export const GET = async (
-	request: NextRequest,
-	{ params }: { params: Promise<{ code: string }> }
+  request: NextRequest,
+  { params }: { params: Promise<{ code: string }> }
 ) => {
-	try {
-		const { code } = await params;
+  try {
+    const { code } = await params;
 
-		const link = await getLinkWithCodeOrId(code);
+    const link = await getLinkWithCodeOrId(code);
 
-		await saveLogs({ link_id: link.id });
+    await saveLogs({ link_id: link.id });
 
-		return NextResponse.redirect(link.main_url);
-	} catch (error) {
-		console.log(error);
-		return NextResponse.redirect("/");
-	}
+    return NextResponse.redirect(link.main_url);
+  } catch (error) {
+    console.log(error);
+    return notFound();
+  }
 };

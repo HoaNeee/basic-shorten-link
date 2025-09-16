@@ -1,4 +1,3 @@
-/* eslint-disable @next/next/no-html-link-for-pages */
 "use client";
 
 import React, { useState } from "react";
@@ -10,10 +9,9 @@ import { Input } from "./ui/input";
 import { ButtonLoading } from "./ui/button";
 import { Label } from "./ui/label";
 import { Checkbox } from "./ui/checkbox";
-import { FaGoogle } from "react-icons/fa";
 import { useAuth } from "@/contexts/auth-context";
 import { useSearchParams } from "next/navigation";
-import Link from "next/link";
+import GoogleLoginButton from "./google-login-button";
 
 const accountSchema = z.union([
   z.email(),
@@ -134,7 +132,9 @@ const FormLogin = () => {
               <Label htmlFor="isRemember">Remember Me</Label>
             </div>
             <a
-              href="/forgot-password"
+              href={`/forgot-password${
+                searchToString ? `?${searchToString}` : ""
+              }`}
               className="text-cyan-700 hover:text-cyan-600 text-sm"
             >
               Forgot password?
@@ -151,10 +151,7 @@ const FormLogin = () => {
           <span className="px-2 font-semibold text-gray-500 bg-white">Or</span>
         </div>
       </div>
-      <button className="bg-red-100/80 hover:text-white hover:bg-red-600 flex items-center justify-center gap-4 px-4 py-2 font-medium text-red-600 transition-colors rounded-sm cursor-pointer">
-        <FaGoogle size={18} />
-        Login in with Google
-      </button>
+      <GoogleLoginButton />
       <p className="mt-4">
         {"Don't"} have an account?{" "}
         <a

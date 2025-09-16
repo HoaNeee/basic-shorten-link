@@ -1,3 +1,5 @@
+"use client";
+
 import FormLogin from "@/components/form-login";
 import React, { Suspense } from "react";
 
