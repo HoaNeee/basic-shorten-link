@@ -1,9 +1,5 @@
 import { isProduction } from "@/lib/contant";
-import {
-  getUserWithAccount,
-  saveUser,
-  updateUserWithId,
-} from "@/lib/db/queries";
+import { getUserWithAccount, saveUser } from "@/lib/db/queries";
 import { ApiError, errorHandler } from "@/lib/error";
 import { setCookieOnServer, signJWT } from "@/lib/utils";
 import { TUser } from "@/types/user.types";
@@ -25,10 +21,6 @@ export const POST = errorHandler(async (req: NextRequest) => {
   const exist = (await getUserWithAccount(email)) as Partial<TUser>;
 
   if (exist) {
-    // if (exist.provider === "google") {
-    //   await updateUserWithId({ fullname: name, avatar: picture }, exist.id);
-    // }
-
     delete exist?.password;
 
     const res = NextResponse.json(
@@ -52,12 +44,15 @@ export const POST = errorHandler(async (req: NextRequest) => {
     return res;
   }
 
+  const username = email.substring(0, email.indexOf("@"));
+
   const user = await saveUser({
     provider: "google",
     email,
     fullname: name,
     avatar: picture,
     status: "active",
+    username,
   });
 
   delete user?.password;

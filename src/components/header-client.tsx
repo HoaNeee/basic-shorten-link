@@ -1,9 +1,11 @@
 /* eslint-disable @next/next/no-html-link-for-pages */
+"use client";
+
 import React from "react";
 import AppLogo from "./app-logo";
 import { MenuNav, MenuNavMobile } from "./menu-nav";
 import { ButtonTransition } from "./ui/button";
-import { Menu } from "lucide-react";
+import { Menu, Sun } from "lucide-react";
 import {
   Sheet,
   SheetContent,
@@ -12,8 +14,11 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "./ui/sheet";
+import { useTheme } from "next-themes";
 
 const HeaderClient = () => {
+  const { theme, setTheme } = useTheme();
+
   return (
     <div className="max-w-7xl flex items-center justify-between w-full h-full mx-auto">
       <div className="flex items-center gap-6">
@@ -24,9 +29,17 @@ const HeaderClient = () => {
           <MenuNav />
         </div>
       </div>
-      <a href="/login" className="md:block hidden">
-        <ButtonTransition>Login</ButtonTransition>
-      </a>
+      <div className="md:flex hidden gap-4">
+        <button
+          className="relative transition-all duration-300 cursor-pointer"
+          onClick={() => setTheme(theme === "light" ? "dark" : "light")}
+        >
+          <Sun className="size-5" />
+        </button>
+        <a href="/login">
+          <ButtonTransition>Login</ButtonTransition>
+        </a>
+      </div>
       <div className="md:hidden block">
         <Sheet>
           <SheetTrigger asChild>

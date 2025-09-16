@@ -33,7 +33,7 @@ const VerifySuccess = (props: Props) => {
   }, [second, searchParams]);
 
   return (
-    <Alert className="bg-green-50 text-green-700">
+    <Alert className="bg-green-50 dark:text-green-500 dark:bg-green-800/20 text-green-700">
       <CheckCircle2Icon />
       <AlertTitle className="text-wrap line-clamp-none">
         {title || "Success! Your Account was be verified."}

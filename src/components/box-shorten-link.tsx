@@ -73,7 +73,7 @@ const BoxShortenLink = ({ domain }: { domain: string }) => {
   };
 
   return (
-    <div className="bg-gradient-to-r from-purple-200 to-red-300 min-h-150 flex flex-col items-center justify-center w-full">
+    <div className="bg-gradient-to-r from-purple-200 dark:from-purple-500 to-pink-300 dark:to-pink-500 min-h-150 flex flex-col items-center justify-center w-full">
       <div className="flex flex-col items-center w-full max-w-3xl py-10">
         <div className="md:flex-row flex flex-col items-center gap-2 text-4xl font-bold">
           <p className="italic">
@@ -98,7 +98,7 @@ const BoxShortenLink = ({ domain }: { domain: string }) => {
             <input
               type="text"
               placeholder="Enter your link"
-              className="focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-transparent max-w-96 w-full p-2 text-lg bg-white border border-gray-300 rounded-md shadow-lg"
+              className="focus:outline-none focus:ring-2 focus:ring-gray-500 dark:focus:ring-gray-300 focus:border-transparent max-w-96 dark:bg-neutral-700 dark:border-gray-400 w-full p-2 text-lg bg-white border border-gray-300 rounded-md shadow-lg"
               name="url"
             />
             <ButtonTransition className="py-3" loading={loading}>
@@ -130,11 +130,13 @@ const BoxShortenLink = ({ domain }: { domain: string }) => {
                 <div className="flex items-center gap-2">
                   <button
                     onClick={() => handleCopy(getShortLink(link))}
-                    className="hover:bg-primary hover:text-white px-4 py-1 text-sm transition-colors bg-transparent border border-black rounded-md cursor-pointer"
+                    className="hover:bg-primary dark:hover:bg-black hover:text-white dark:text-black dark:hover:text-white px-4 py-1 text-sm transition-colors bg-transparent border border-black rounded-md cursor-pointer"
                   >
                     {copied ? "Copied" : "Copy"}
                   </button>
-                  <Button variant={"link"}>Statistics</Button>
+                  <Button variant={"link"} className="dark:text-black">
+                    Statistics
+                  </Button>
                 </div>
               </>
             )}

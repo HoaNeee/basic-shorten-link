@@ -22,7 +22,7 @@ const FormVerifyOTP = (props: Props) => {
 
   return (
     <div className="flex flex-col gap-4">
-      <h3 className="text-2xl font-bold text-center text-green-700">
+      <h3 className="dark:text-green-500  text-2xl font-bold text-center text-green-700">
         {title || "Verification"}
       </h3>
       <div className="my-6">

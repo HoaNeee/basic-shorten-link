@@ -41,7 +41,7 @@ const GoogleLoginButton = () => {
 
   return (
     <button
-      className="bg-red-100/80 hover:text-white hover:bg-red-600 flex items-center justify-center gap-4 px-4 py-2 font-medium text-red-600 transition-colors rounded-sm cursor-pointer"
+      className="bg-red-100/80 hover:text-white hover:bg-red-600 dark:bg-red-700/30 dark:hover:bg-red-700 flex items-center justify-center gap-4 px-4 py-2 font-medium text-red-600 transition-colors rounded-sm cursor-pointer"
       onClick={handleLoginWithGoogle}
     >
       <FaGoogle size={18} />

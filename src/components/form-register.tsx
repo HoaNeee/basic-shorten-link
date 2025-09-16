@@ -78,7 +78,9 @@ const FormRegister = () => {
 
   return (
     <div className="flex flex-col gap-4">
-      <h3 className="text-2xl font-bold text-center text-green-700">Sign Up</h3>
+      <h3 className="dark:text-green-500 text-2xl font-bold text-center text-green-700">
+        Sign Up
+      </h3>
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
@@ -189,9 +191,11 @@ const FormRegister = () => {
           />
         </form>
       </Form>
-      <div className="relative w-full my-4 h-[1px] bg-gray-200">
+      <div className="relative w-full my-4 h-[1px] bg-gray-200 dark:bg-gray-400">
         <div className="-top-3 absolute left-0 flex items-center justify-center w-full">
-          <span className="px-2 font-semibold text-gray-500 bg-white">Or</span>
+          <span className="dark:bg-neutral-700 dark:text-gray-400 px-2 font-semibold text-gray-500 bg-white">
+            Or
+          </span>
         </div>
       </div>
       <GoogleLoginButton />
@@ -201,7 +205,7 @@ const FormRegister = () => {
           href={`/login${
             searchParams.toString() ? `?${searchParams.toString()}` : ""
           }`}
-          className="text-cyan-700 hover:text-cyan-600"
+          className="text-cyan-700 hover:text-cyan-600 dark:text-cyan-500 dark:hover:text-cyan-400"
         >
           Login
         </a>
